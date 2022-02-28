@@ -1,0 +1,26 @@
+{
+  "name": "weather-station-backend",
+  "version": "1.0.0",
+  "description": "This is the Backend for the weather stations",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "jest --watchAll"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.1",
+    "pg-pool": "^3.4.1",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "jest": "^27.4.4",
+    "supertest": "^6.1.6"
+  }
+}

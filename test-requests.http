@@ -1,0 +1,7 @@
+###
+GET http://localhost:3000/stations HTTP/1.1
+
+###
+GET https://gorest.co.in/public/v2/todos HTTP/1.1
+
+###
