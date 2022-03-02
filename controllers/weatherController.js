@@ -18,8 +18,4 @@ const insertDataWeatherStation =async (req, res) => {
         "Insert Data" : "Success"
     })
 }
-
-
-
-
 module.exports = {insertDataWeatherStation}

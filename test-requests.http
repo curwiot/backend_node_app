@@ -1,7 +1,43 @@
 ###
 GET http://localhost:3000/stations HTTP/1.1
 
+### get specific station details
+GET http://localhost:3000/stations/curw_ws_attidiya HTTP/1.1
+
+### get station by name
+GET http://localhost:3000/stations/findbyname/kant HTTP/1.1
+
+### create new station in the data base
+POST http://localhost:3000/stations HTTP/1.1
+Content-Type: application/json
+
+{
+    "station_id": "curw_test_station",
+    "station_password" : "this is just a test password",
+    "station_name": "station_name",
+    "latitude":100.0,
+    "longitude":12.2,
+    "description": "this is a test station",
+    "station_type": 0,
+    "domestic_contact":"076677323123",
+    "place": "test_location_metro area"
+}
 ###
-GET https://gorest.co.in/public/v2/todos HTTP/1.1
+PUT http://localhost:3000/stations/curw_test_station HTTP/1.1
+Content-Type: application/json
+
+{
+    "station_id": "curw_test_station_1",
+    "station_password" : "this is just a test password",
+    "station_name": "station_name",
+    "latitude":100.0,
+    "longitude":12.2,
+    "description": "this is a test station",
+    "station_type": 0,
+    "domestic_contact":"076677323123",
+    "place": "test_location_metro area"
+}
+
 
 ###
+DELETE http://localhost:3000/stations/curw_test_station_1

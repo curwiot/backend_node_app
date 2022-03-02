@@ -3,18 +3,19 @@ require('dotenv').config();
 let crypto = require('crypto');
 
 class station {
-    constructor(ID, PASSWORD, NAME, LATITUDE, LONGITUDE, DESCRIPTION, LASTMAINTENANCE, STATIONTYPE, DOMESTICCONTACT) {
-        this.id = null;
-        this.station_ID = ID;
-        this.station_PASSWROD = PASSWORD;
-        this.station_name = NAME;
-        this.station_latitude = LATITUDE;
-        this.station_longitude = LONGITUDE;
-        this.station_description = DESCRIPTION;
-        this.station_lastMaintenance = LASTMAINTENANCE;
-        this.station_type = STATIONTYPE;
-        this.domestic_contact = DOMESTICCONTACT;
-        this.meta_data = {};
+    constructor(object) {
+        //id,station_id,station_password,station_name,latitude,longitude, description, station_type, domestic_contact,place
+        this.id = object.id;
+        this.station_ID =object.station_id
+        this.station_PASSWROD = object.station_password;
+        this.station_name = object.station_name;
+        this.station_latitude = object.latitude;
+        this.station_longitude = object.longitude;
+        this.station_description = object.description;
+        this.station_type = object.station_type;
+        this.domestic_contact = object.domestic_contact;
+        this.place=object.place;
+        
     }
 
     async validate_station() {
