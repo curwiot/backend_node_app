@@ -23,9 +23,7 @@ const getAllStations = async (req, res) => {
 const getStationById = async (req, res) => {
     const station_id = req.params.id;
     const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [station_id]);
-    console.log(station_selected)
     station_object = new station(station_selected[0])
-    console.log(station_object)
     if (station_selected.length == 0) {
         res.status(200).json(new Response_object(null, 500, "station has not been found"))
     } else {
@@ -105,53 +103,51 @@ const delete_station_by_id = async (req, res) => {
 
 //update station
 const update_station = async (req, res) => {
+    const update_body = req.body
     const station_id = req.params.id;
-    const dataObject = req.body;
-    var station_selected = await db_connection.command("select id,station_password,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [station_id]).then(()=>{
-        console.log("selected staion executed")
-    });
-    console.log(dataObject)
-    console.log(dataObject.station_id.length)
-    console.log(station_selected.length);
-    if (station_selected.length != 0) {
-        console.log("to there")
-        console.log(station_selected)
-        const station_object = new station(station_selected[0]);
-        //if(dataObject.station_id.length)        
-        dataObject.station_id.length ?  selected_station.station_ID = station_id :selected_station.station_ID=selected_station.station_ID;
-        console.log(selected_station)
-        // dataObject.station_password ? selected_station.station_PASSWROD = station_password : selected_station.station_PASSWROD;
-        // dataObject.station_name ? selected_station.station_name = station_name : selected_station.station_name;
-        // dataObject.latitude ? selected_station.station_latitude = latitude : selected_station.station_latitude;
-        // dataObject.longitude ? selected_station.station_longitude = longitude : selected_station.station_longitude;
-        // dataObject.description ? selected_station.station_description = description : selected_station.station_description;
-        // dataObject.station_type ? selected_station.station_type = station_type : selected_station.station_type;
-        // dataObject.domestic_contact ? selected_station.domestic_contact = domestic_contact : selected_station.domestic_contact;
-        // dataObject.place ? selected_station.place = place : selected_station.place;
-
-        //update inthe database
-        const updated_station = await db_connection.command("update station set station_id = $1,station_password=$2,station_name=$3,latitude=$4,longitude=$5,description=$6,station_type=$7,domestic_contact=$8,place=$9 where station_id=$10",
-            selected_station.station_ID,
-            selected_station.station_PASSWROD,
-            selected_station.station_name,
-            selected_station.station_latitude,
-            selected_station.station_longitude,
-            selected_station.station_description,
-            selected_station.station_type,
-            selected_station.domestic_contact,
-            selected_station.place,
-            station_id
-        );
-        const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [selectedstation.station_ID]);
-        if (station_selected.length == 0) {
-            res.status(200).json(new Response_object(null, 500, "The station update was not successful"))
-        } else {
-            res.status(200).json(new Response_object(station_selected[0],204,"The station has been successfuly updated"))
+    const station_selected_to_update = await db_connection.command("select id,station_password,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [station_id]);
+    if (station_selected_to_update.length != 0) {
+        //sation is available in the database
+        var updating_station = new station(station_selected_to_update[0])
+        var request_station = new station(update_body)
+        for (const [key, value] of Object.entries(request_station)) {
+            console.log(key)
+            console.log(value)
+            if (typeof (value) !== 'undefined') {
+                updating_station[key] = value;
+            }
         }
-    }else{
-        //station has not been found in the database
+        //checking the updated station
+        console.log(updating_station)
+        //updating station
+        const updated_station = await db_connection.command("update station set station_id = $1,station_password=$2,station_name=$3,latitude=$4,longitude=$5,description=$6,station_type=$7,domestic_contact=$8,place=$9 where station_id=$10", [
+            updating_station.station_ID,
+            updating_station.station_PASSWROD,
+            updating_station.station_name,
+            updating_station.station_latitude,
+            updating_station.station_longitude,
+            updating_station.station_description,
+            updating_station.station_type,
+            updating_station.domestic_contact,
+            updating_station.place,
+            station_id
+        ]);
+
+        //checking newly updated station
+        const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [updating_station.station_ID]);
+        if (station_selected[0].length != 0) {
+            //station successfuly updated
+            res.status(200).json(new Response_object(station_selected[0], 200, "The station record has been updated in the database"))
+        } else {
+            res.status(200).json(new Response_object(null, 500, "Data has not been updated in the database"))
+        }
+    } else {
+        //station is not available in the database
+        res.status(200).json(new Response_object(null, 500, "The station was not found in the datbaase"))
     }
 
 }
+
+
 
 module.exports = { getAllStations, getStationById, findStationByName, insert_station, delete_station_by_id, update_station }
