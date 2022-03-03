@@ -2,6 +2,14 @@ const request = require('supertest');
 const app = require('../app')
 
 describe("GET /stations", () => {
+    describe('Server status check', () => {
+        test('check server status', async () => {
+            const response = await request(app).get('/status').set('Accept', 'application/json')
+            expect(response.status).toEqual(200);
+        })
+    })
+
+
     describe('All station Route testing', () => {
         test("Get All stations", async () => {
             const response = await request(app).get("/stations").set('Accept', 'application/json')
@@ -82,7 +90,7 @@ describe("GET /stations", () => {
 
         })
     })
-    
+
     describe('Update station station by ID', () => {
         test('Update station with correct id', async () => {
             const response = await request(app).put("/stations/curw_test_station").set('Accept', 'application/json').send(
@@ -126,8 +134,8 @@ describe("GET /stations", () => {
         })
         test('Delete station for wrong id', async () => {
             const response = await request(app).delete("/stations/wrong_id").set('Accept', 'application/json')
-            expect(response.status).toEqual(204);
+            expect(response.status).toEqual(204)
+            done()
         })
     })
-
 })
