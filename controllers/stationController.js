@@ -12,7 +12,7 @@ const getAllStations = async (req, res) => {
         stations_array = [...stations_array, new station(element)]
     })
     if (stations.length == 0) {
-        res.status(200).json(new Response_object(null, 500, "no station has been found"))
+        res.status(204)
     }
     res.status(200).json(new Response_object(stations_array, 200, "Success request"))
 
@@ -22,14 +22,17 @@ const getAllStations = async (req, res) => {
 //get stations by ID
 const getStationById = async (req, res) => {
     const station_id = req.params.id;
-    const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [station_id]);
-    station_object = new station(station_selected[0])
-    if (station_selected.length == 0) {
-        res.status(200).json(new Response_object(null, 500, "station has not been found"))
-    } else {
-        res.status(200).json(new Response_object(station_object, 200, "Success"))
+    const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station_id =$1", [station_id]);
+    console.log(station_selected.length)
+    if (station_selected.length !== 0) {
+        console.log('entered')
+        console.log(station_selected)
+        station_object = new station(station_selected[0])
+        console.log(station_object)
+        res.status(200).json(new Response_object(station_object, 200, "Success request"))
+    }else{
+        res.status(204).json({})
     }
-
 }
 
 //find stations by name
@@ -45,8 +48,8 @@ const findStationByName = async (req, res) => {
     if (max > 0.2) {
         var index = matches.indexOf(max)
         res.status(200).json(new Response_object(stations[index], 200, "station has been found"))
-    } else {
-        res.status(200).json(new Response_object(null, 500, "try with more letters"))
+    }else{
+        res.status(204).json({})
     }
 }
 
@@ -76,12 +79,12 @@ const insert_station = async (req, res) => {
                 new Response_object(available_inserted_stations, 201, "The station has been inserted into the database")
             )
         } else {
-            res.status(200).json(
+            res.status(500).json(
                 new Response_object(null, 500, "The station record is not available in the database but failed to insert into the database")
             )
         }
     } else {
-        res.status(200).json(
+        res.status(208).json(
             new Response_object(null, 200, "Station is already available in the database")
         )
     }
@@ -93,7 +96,7 @@ const delete_station_by_id = async (req, res) => {
     const station_id = req.params.id;
     const station_selected_to_delete = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station.station_id =$1", [station_id]);
     if (station_selected_to_delete.length == 0) {
-        res.status(200).json(new Response_object(null, 500, "The station has not been found in the database"))
+        res.status(204).json(new Response_object(null, 500, "The station has not been found in the database"))
     } else {
         const station_selected = new station(station_selected_to_delete[0])
         const station_deleted = await db_connection.command("delete from station where station.station_id = $1", [station_id])
@@ -143,7 +146,7 @@ const update_station = async (req, res) => {
         }
     } else {
         //station is not available in the database
-        res.status(200).json(new Response_object(null, 500, "The station was not found in the datbaase"))
+        res.status(204).json(new Response_object(null, 500, "The station was not found in the datbaase"))
     }
 
 }
