@@ -1,9 +1,10 @@
 name: Curw Workflow
 on:
+  workflow_dispatch:
   push:
-    branches: ["*"]
+    branches: ["master"]
   pull_request:
-    branches: ["*"]
+    branches: ["workflow"]
 jobs:
   build:
     runs-on: ubuntu-latest
