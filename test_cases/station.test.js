@@ -128,14 +128,13 @@ describe("GET /stations", () => {
     })
 
     describe('Delete station by ID', () => {
+        test('Delete station for wrong id', async () => {
+            const response = await request(app).delete("/stations/wrong_id").set('Accept', 'application/json')
+            expect(response.status).toEqual(204);
+        })
         test('Delete station', async () => {
             const response = await request(app).delete("/stations/curw_test_station_1").set('Accept', 'application/json')
             expect(response.status).toEqual(200);
-        })
-        test('Delete station for wrong id', async () => {
-            const response = await request(app).delete("/stations/wrong_id").set('Accept', 'application/json')
-            expect(response.status).toEqual(204)
-            done()
         })
     })
 })

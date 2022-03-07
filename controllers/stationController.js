@@ -23,12 +23,8 @@ const getAllStations = async (req, res) => {
 const getStationById = async (req, res) => {
     const station_id = req.params.id;
     const station_selected = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,station_type,domestic_contact,place from station where station_id =$1", [station_id]);
-    console.log(station_selected.length)
     if (station_selected.length !== 0) {
-        console.log('entered')
-        console.log(station_selected)
         station_object = new station(station_selected[0])
-        console.log(station_object)
         res.status(200).json(new Response_object(station_object, 200, "Success request"))
     }else{
         res.status(204).json({})
@@ -114,14 +110,10 @@ const update_station = async (req, res) => {
         var updating_station = new station(station_selected_to_update[0])
         var request_station = new station(update_body)
         for (const [key, value] of Object.entries(request_station)) {
-            console.log(key)
-            console.log(value)
             if (typeof (value) !== 'undefined') {
                 updating_station[key] = value;
             }
         }
-        //checking the updated station
-        console.log(updating_station)
         //updating station
         const updated_station = await db_connection.command("update station set station_id = $1,station_password=$2,station_name=$3,latitude=$4,longitude=$5,description=$6,station_type=$7,domestic_contact=$8,place=$9 where station_id=$10", [
             updating_station.station_ID,
@@ -146,7 +138,7 @@ const update_station = async (req, res) => {
         }
     } else {
         //station is not available in the database
-        res.status(204).json(new Response_object(null, 500, "The station was not found in the datbaase"))
+        res.status(204).json(new Response_object(null, 204, "The station was not found in the datbaase"))
     }
 
 }
