@@ -138,7 +138,7 @@ const update_station = async (req, res) => {
         }
     } else {
         //station is not available in the database
-        res.status(204).json(new Response_object(null, 500, "The station was not found in the datbaase"))
+        res.status(204).json(new Response_object(null, 204, "The station was not found in the datbaase"))
     }
 
 }
