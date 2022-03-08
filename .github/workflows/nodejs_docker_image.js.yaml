@@ -1,6 +1,8 @@
 Name : Docker file
 on:
-  workflows: ["Node-test_cases"]
-  branches: [main,workflow]
-  types:
-    - completed
+  workflow_run: 
+    workflows: ["Node-test_cases"]
+    types:
+      - completed
+
+
