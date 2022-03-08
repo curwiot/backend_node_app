@@ -41,6 +41,7 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
 
   docker:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       -
@@ -60,4 +61,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: user/app:latest 
+          tags: curwiot/backend-restapi:latest 
