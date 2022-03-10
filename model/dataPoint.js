@@ -40,7 +40,11 @@ class dataPoint {
 
     //password validation
     async password_validation() {
-        const new_station = new station(this.ID, this.PASSWORD);
+        const station_details = {
+            station_id : this.ID,
+            station_password : this.PASSWORD 
+        }
+        const new_station = new station(station_details);
         await new_station.validate_station();
         if (new_station.station_name == undefined) {
             return false;
@@ -105,7 +109,7 @@ class dataPoint {
         if (this.station.station_type == 1) {
             //water level 
             if (this.waterlevel != undefined) {
-                this.upsert_executor(this.station.meta_data[9], this.waterlevel, this.date, 9)
+                this.upsert_executor(this.station.meta_data[11], this.waterlevel, this.date, 11)
             }
         }
 

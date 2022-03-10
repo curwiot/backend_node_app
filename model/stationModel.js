@@ -33,9 +33,9 @@ class station {
         this.station_latitude = object.latitude;
         this.station_longitude = object.longitude;
         this.station_description = object.description;
-        this.station_lastMaintenance = object.last_maintenance;
         this.station_type = object.station_type;
         this.domestic_contact = object.domestic_contact;
+        this.place = object.place;
     }
 
     async station_metadata() {

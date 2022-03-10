@@ -31,5 +31,12 @@ kubernetes
 
 #env file
 *.env
+
+#http files
 *.http
+
+#test cases 
 test_cases
+
+#kubenetes deployments
+k8s
