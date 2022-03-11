@@ -17,6 +17,7 @@
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",
     "pg-pool": "^3.4.1",
+    "redis": "^4.0.4",
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {

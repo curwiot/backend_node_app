@@ -1,19 +1,21 @@
 const db_connection = require('../database/pgPoolconnection')
+const {redis_class} = require('../redis/redis_client')
 
-const getStatus = async (req, res) => {
-    station_list = await get_all_stations()
-    station_data_set= await get_stations_last_records(station_list)
-    
-    //station_list_data = await get_stations_last_records(station_list)
-    //console.log(station_list)
-    //const station_data = station_list.reduce(async (data_array, element) => {
-        //const station_data = await get_station_last_data(element.id)
-        //console.log(typeof(data_array))
-        //data_array.push(station_data)
-        //return data_array
-    //}, [])
-
-    res.json(station_data_set)
+const get_status = async (req, res) => {
+    //creating redist client 
+    var redis_object = new redis_class();
+    await redis_object.create_client();
+    // await redis_object.set_value('key',{'test':'rajantha '},1);
+    // await redis_object.get_value('key')
+    const cache_status = await redis_object.get_value('station_status')
+    if( cache_status == null ){
+        station_list = await get_all_stations()
+        station_data_set = await get_stations_last_records(station_list)
+        await redis_object.set_value('station_status',station_data_set,1)
+        res.json(station_data_set)
+    }else{
+        res.json(cache_status);
+    }
 }
 
 async function get_metadata(value_id) {
@@ -23,7 +25,7 @@ async function get_metadata(value_id) {
 }
 
 async function get_all_stations() {
-    const stations = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,last_maintenance,station_type,domestic_contact from station order by station_id asc");
+    const stations = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,place,station_type,domestic_contact from station order by station_id asc");
     return stations
 }
 
@@ -32,13 +34,18 @@ async function get_station_last_data(station_id) {
     return data_object
 }
 
-async function get_stations_last_records (stations) {
+async function get_stations_last_records(stations) {
     let data = [];
     await Promise.all(stations.map(async (station) => {
-      station_data = await get_station_last_data(station.id);
-      data.push(station_data);
+        var station_data = await get_station_last_data(station.id);
+        if (station_data.length != 0) {
+            const pushing_obj = {
+                station_data: station_data,
+                station: station
+            }
+            data.push(pushing_obj);
+        }
     }));
-    console.log(data);
     return data
 }
 
@@ -69,4 +76,8 @@ async function get_stations_last_records (stations) {
 //     );
 // }
 
-module.exports = { getStatus }
+
+const get_data = async (req, res) => {
+
+}
+module.exports = { get_status,get_data }
