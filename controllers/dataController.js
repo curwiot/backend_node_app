@@ -30,8 +30,18 @@ async function get_all_stations() {
 }
 
 async function get_station_last_data(station_id) {
-    const data_object = await db_connection.command("select parameter,value from run left join parameter p on p.parameter_id = run.parameter_id where station=$1", [station_id])
-    return data_object
+    var data_object = await db_connection.command("select parameter,value from run left join parameter p on p.parameter_id = run.parameter_id where station=$1", [station_id])
+    let data_object_send = []
+    if(data_object.length != 0){
+        data_object.forEach((element)=>{
+            const parameter_temp = element.parameter
+            const value_temp  = element.value;
+            data_object_temp = {[parameter_temp] : value_temp};
+            data_object_send.push(data_object_temp);
+        })
+  
+    }
+    return data_object_send
 }
 
 async function get_stations_last_records(stations) {
