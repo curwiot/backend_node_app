@@ -1,4 +1,5 @@
 const redis = require('redis')
+require('dotenv').config();
 
 class redis_class {
     constructor() {
@@ -6,7 +7,7 @@ class redis_class {
     }
     async create_client() {
         var client = redis.createClient({
-            url: 'redis://124.43.5.187:27020'
+            url: process.env.REDIS_URL
         });
         client.on('error', (err) => console.log('Redis Client Error', err));
         await client.connect();
