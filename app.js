@@ -1,4 +1,5 @@
 const express = require('express');
+var morgan = require('morgan');
 require('dotenv').config(); //environmental variable configurations
 
 const weatherData = require('./routes/weather/weatherData')
@@ -10,12 +11,14 @@ const status = require('./routes/server_status/status')
 const app = express();
 app.use(express.json())
 
+//morgan
+app.use(morgan('combined'))
+
 //routes
 app.use('/status', status);
 app.use('/update', weatherData);
 app.use('/stations', station);
 app.use('/data', data);
-
 
 //    /weatherstation/updateweatherstation [post]
 //    /waterlevelgauge/updatewaterlevelgauge [post]
