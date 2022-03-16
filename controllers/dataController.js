@@ -4,7 +4,7 @@ const {redis_class} = require('../redis/redis_client')
 const get_status = async (req, res) => {
     //creating redist client 
     var redis_object = new redis_class();
-    await redis_object.create_client();
+    //await redis_object.create_client();
     // await redis_object.set_value('key',{'test':'rajantha '},1);
     // await redis_object.get_value('key')
     const cache_status = await redis_object.get_value('station_status')
