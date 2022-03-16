@@ -1,8 +1,9 @@
 const express = require('express');
-const { getStatus } = require('../../controllers/dataController');
+const { get_status } = require('../../controllers/dataController');
 const router = express.Router();
 
-router.route('/status').get(getStatus);
+router.route('/status').get(get_status);
+router.route('/getdata').get()
 
 
 module.exports = router

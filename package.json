@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start-dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "node server.js --unhandled-rejections=throw",
     "test": "jest --forceExit"
   },
   "author": "",
@@ -14,9 +14,11 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",
     "pg-pool": "^3.4.1",
+    "redis": "^4.0.4",
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {
