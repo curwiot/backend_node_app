@@ -2,16 +2,11 @@ const db_connection = require('../database/pgPoolconnection')
 const {redis_class} = require('../redis/redis_client')
 
 const get_status = async (req, res) => {
-    //creating redist client 
-    var redis_object = new redis_class();
-    //await redis_object.create_client();
-    // await redis_object.set_value('key',{'test':'rajantha '},1);
-    // await redis_object.get_value('key')
-    const cache_status = await redis_object.get_value('station_status')
+    const cache_status = await new redis_class().get_value('station_status')
     if( cache_status == null ){
         station_list = await get_all_stations()
         station_data_set = await get_stations_last_records(station_list)
-        await redis_object.set_value('station_status',station_data_set,1)
+        await new redis_class().set_value('station_status',station_data_set,1)
         res.json(station_data_set)
     }else{
         res.json(cache_status);
@@ -58,34 +53,6 @@ async function get_stations_last_records(stations) {
     }));
     return data
 }
-
-// async function get_stations_last_records(stations) {
-//     var station_status = {}
-//     let station_data = []
-//     await stations.forEach(async element => {
-//         let temp_data = 
-
-
-//         station_data = await get_station_last_data(element.id)
-//         if (station_data.length == 0) {
-//             const data_set = {
-//                 station: element,
-//                 "station_data": "not reported"
-//             }
-//             station_status = { ...station_status, data_set }
-//         } else {
-//             const data_set = {
-//                 station: element,
-//                 "station_data": station_data
-//             }
-//             station_status = { ...station_status, data_set }
-//         }
-
-//         console.log(JSON.stringify(station_status))
-//     }
-//     );
-// }
-
 
 const get_data = async (req, res) => {
 
