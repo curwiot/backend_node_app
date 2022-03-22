@@ -3,28 +3,27 @@ require('dotenv').config();
 
 class redis_class {
     async set_value(key, value, mins) {
+        const url = `redis://${process.env.redisHost}:${process.env.redisPort}`;
         var client = redis.createClient({
-            host: process.env.REDIS_HOST,
-            port: process.env.REDIS_PORT,
-        });
-        client['auth']=null
+            url:url
+        }
+        );
         client.on('error', (err) => console.log('Redis Client Error', err));
-        await client.connect();
-        this.client = client
-        await this.client.setEx(key, 60 * parseInt(mins), JSON.stringify(value))
+        await client.connect()
+        await client.setEx(key, 60 * parseInt(mins), JSON.stringify(value))
+        
     }
 
     //get value
     async get_value(key) {
+        const url = `redis://${process.env.redisHost}:${process.env.redisPort}`;
         var client = redis.createClient({
-            //url: process.env.REDIS_URL
-            host: process.env.REDIS_HOST,
-            port: process.env.REDIS_PORT,
-        });
+            url:url
+        }
+        );
         client.on('error', (err) => console.log('Redis Client Error', err));
         await client.connect();
-        this.client = client
-        const value = await this.client.get(key)
+        const value = await client.get(key)
         return JSON.parse(value)
     }
 }
