@@ -16,7 +16,8 @@ app.use(morgan('combined'))
 
 //routes
 app.use('/status', status);
-app.use('/update', weatherData);
+app.use('/weatherstation', weatherData); // accoring to the previous end points this settings has been changed
+app.use('/waterlevelgauge/',weatherData); // accoring to the previous end points this settings has been changed
 app.use('/stations', station);
 app.use('/data', data);
 
