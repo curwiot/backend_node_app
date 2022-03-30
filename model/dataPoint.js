@@ -41,8 +41,8 @@ class dataPoint {
     //password validation
     async password_validation() {
         const station_details = {
-            station_id : this.ID,
-            station_password : this.PASSWORD 
+            station_id: this.ID,
+            station_password: this.PASSWORD
         }
         const new_station = new station(station_details);
         await new_station.validate_station();
@@ -55,7 +55,7 @@ class dataPoint {
     }
 
     async meta_data_generate() {
-       return await this.station.station_metadata();
+        return await this.station.station_metadata();
     }
 
     //last reading 
@@ -98,10 +98,10 @@ class dataPoint {
                 //insert into rainticks
                 try {
                     for (const [key, value] of Object.entries(this.rain)) {
-                        const run = await db_connection.command('insert into rain_ticks (id, rain_tick_no, rain_tick_time) values ($1,$2,$3) on conflict (id,rain_tick_time) DO UPDATE SET rain_tick_time=$3 ,rain_tick_no=$2 ', [this.station.meta_data[4], key, value]);
+                        const run = await db_connection.command('insert into rain_ticks (meta_id, rain_tick_no, rain_tick_time) values ($1,$2,$3) on conflict (meta_id,rain_tick_time) DO UPDATE SET rain_tick_time=$3 ,rain_tick_no=$2 ', [this.station.meta_data[4], key, value]);
                     }
                 } catch (error) {
-                   // console.log(error)
+                    console.log(error)
                 }
             }
         }
@@ -132,16 +132,16 @@ class dataPoint {
     async upsert_executor(hashid, value, time, parameter) {
         //insert into run table
         try {
-            const run = await db_connection.command('INSERT INTO run(id,station,originate_time,parameter_id,value) VALUES($1,$2,$3,$4,$5) ON CONFLICT (id) DO UPDATE SET originate_time =$3,value=$5', [hashid, this.station.id, time, parameter, value]);
+            const run = await db_connection.command('INSERT INTO run(meta_id,station_id,originated_time,parameter_id,value) VALUES($1,$2,$3,$4,$5) ON CONFLICT (meta_id) DO UPDATE SET originated_time =$3,value=$5', [hashid, this.station.id, time, parameter, value]);
         } catch (error) {
-          //  console.log(error)
+            //  console.log(error)
         }
 
         //insert into data table
         try {
-            const data = await db_connection.command('INSERT INTO data(id,time,value) VALUES($1,$2,$3) ON CONFLICT DO NOTHING', [hashid, time, value]);
+            const data = await db_connection.command('INSERT INTO data(meta_id,time,value) VALUES($1,$2,$3) ON CONFLICT DO NOTHING', [hashid, time, value]);
         } catch (error) {
-           // console.log(error)
+            // console.log(error)s
         }
     }
 }

@@ -1,5 +1,5 @@
-const db_connection = require('../database/pgPoolconnection')
-const {redis_class} = require('../redis/redis_client')
+const db_connection = require('../database/pgPoolconnection');
+const {redis_class} = require('../redis/redis_client');
 
 const get_status = async (req, res) => {
     const cache_status = await new redis_class().get_value('station_status')
