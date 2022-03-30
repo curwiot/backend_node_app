@@ -50,7 +50,7 @@ class station {
         var data = await db_connection.command('select * from meta_data where station_id=$1 ', [this.station_ID]);
         var temp_meta_data = {};
         data.forEach((value, index) => {
-            temp_meta_data[value.parameter_id] = value.hash_key
+            temp_meta_data[value.parameter_id] = value.meta_id
         })
         this.meta_data = temp_meta_data
     }
