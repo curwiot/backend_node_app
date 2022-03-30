@@ -6,7 +6,9 @@ name: Node-test_cases
 on:
   workflow_dispatch:
   push:
-    branches: [ workflow ]
+    branches:
+    - '**'        # matches every branch
+    - '!master'   # excludes master
   pull_request:
     branches: [ master ]
 
