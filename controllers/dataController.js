@@ -13,12 +13,6 @@ const get_status = async (req, res) => {
     }
 }
 
-async function get_metadata(value_id) {
-    const meta_data = await db_connection.command("select * from run where station=$1", [value_id]);
-    console.log(meta_data)
-    return meta_data
-}
-
 async function get_all_stations() {
     const stations = await db_connection.command("select id,station_id,station_name,latitude,longitude,description,place,station_type,domestic_contact from station order by station_id asc");
     return stations
