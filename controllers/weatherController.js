@@ -12,7 +12,7 @@ const insertDataWeatherStation = async (req, res) => {
         //CHECK META DATA IS AVAILABLE
         //create staion var
         var station_redis_string = "update_"+newData.station.id
-        const cache_station = await new redis_class().get_value(station_redis_string)
+        const cache_station = await new redis_class().get_value(station_redis_string);
         if(cache_station == null){
             await newData.meta_data_generate();
             await new redis_class().set_value(station_redis_string,newData.station.meta_data,3600); // 1 hour time delay
