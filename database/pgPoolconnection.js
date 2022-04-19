@@ -15,13 +15,15 @@ module.exports.command = async function (query, values) {
         var connection = client.connect()
     } catch (error) {
         await console.log(error)
+        client.end();
     }
 
     try {
         const res = await client.query(query, values)
-        client.end()
+        client.end();
         return res.rows;
     } catch (err) {
         console.log(err.stack)
+        client.end();
     }
 }

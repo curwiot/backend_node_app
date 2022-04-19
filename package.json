@@ -11,14 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "morgan-body": "^2.6.6",
     "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
     "pg": "^8.7.1",
     "pg-pool": "^3.4.1",
     "redis": "^4.0.4",
+    "rotating-file-stream": "^3.0.3",
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {
