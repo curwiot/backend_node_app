@@ -46,11 +46,11 @@ const get_all_stations_data = async (req, res) => {
         await new redis_class().set_value('all_station_details', all_stations, 10000);
     }
     await Promise.all(all_stations.map(async (station) => {
-        var data =await generate_db_string(station.station_id, parameters, start_time, end_time)
+        var data = await generate_db_string(station.station_id, parameters, start_time, end_time)
         all_station_data.push({
-            station_id :station.station_id,
+            station_id: station.station_id,
             data: data
-        } );
+        });
     })
 
     ).then(element => {
