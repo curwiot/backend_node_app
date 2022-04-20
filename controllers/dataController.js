@@ -200,7 +200,7 @@ async function generate_db_string(station_id, parameters, start_time, end_time) 
             }
         }
         //set redis 
-        await new redis_class().set_value(start_time + "_" + end_time + "_" + station_id, output, 10000);
+        await new redis_class().set_value(start_time + "_" + end_time + "_" + station_id, output, 5);
         return output
     } else {
         return cache_status
