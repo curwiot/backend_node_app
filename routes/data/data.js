@@ -1,12 +1,12 @@
 const express = require('express');
-const { get_status,get_data_station, get_all_stations_data } = require('../../controllers/dataController');
+const { get_status,get_data_station, get_all_stations_data,get_all_rain } = require('../../controllers/dataController');
 const router = express.Router();
 
 
 router.route('/status').get(get_status);
-router.route('/station/:id').get(get_data_station)
-router.route('/station').get(get_all_stations_data)
-
+router.route('/station/:id').get(get_data_station);
+router.route('/station').get(get_all_stations_data);
+router.route('/rain').get(get_all_rain)
 
 
 //get station data 

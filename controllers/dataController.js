@@ -42,7 +42,7 @@ const get_all_stations_data = async (req, res) => {
     //get all stations
     var all_stations = await new redis_class().get_value('all_station_details');
     if (all_stations == null) {
-        all_stations = await db_connection.command("select * from station");
+        all_stations = await db_connection.command("select * from station where station_type='0'");
         await new redis_class().set_value('all_station_details', all_stations, 10000);
     }
     await Promise.all(all_stations.map(async (station) => {
@@ -207,4 +207,31 @@ async function generate_db_string(station_id, parameters, start_time, end_time) 
     }
 
 }
-module.exports = { get_status, get_data_station, get_all_stations_data }
+
+const get_all_rain = async (req, res) => {
+    const start_time = req.body.start_time;
+    const end_time = req.body.end_time;
+    var data_output = []
+    //get all stations 
+    var stations = await db_connection.command("select * from station where station_type='0'");
+    var rain_data = await db_connection.command("select time,station_id,value from rain_amount inner join meta_data md on rain_amount.meta_id = md.meta_id where time between $1 and $2", [start_time, end_time])
+
+    stations.map(station => {
+        var filtered_records = rain_data.filter(element => {
+            if (element.station_id == station.station_id) {
+                return true
+            } else {
+                return false
+            }
+        })
+        var object = {
+            station: station.station_id,
+            data: filtered_records
+        }
+        data_output.push(object);
+    })
+    res.send(data_output)
+}
+
+module.exports = { get_status, get_data_station, get_all_stations_data, get_all_rain }
+ 
